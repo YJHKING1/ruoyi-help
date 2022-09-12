@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.study.mapper.StudentEducationMapper">
+    <resultMap type="StudentEducation" id="StudentEducationResult">
+        <result property="id" column="id"/>
+        <result property="education" column="education"/>
+    </resultMap>
+
+    <sql id="selectStudentEducationVo">
+        select id, education
+        from student_education
+    </sql>
+
+    <select id="selectStudentEducationList" parameterType="StudentEducation" resultMap="StudentEducationResult">
+        <include refid="selectStudentEducationVo"/>
+        <where>
+            <if test="education != null  and education != ''">
+                and education = #{education}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectStudentEducationById" parameterType="Long" resultMap="StudentEducationResult">
+        <include refid="selectStudentEducationVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertStudentEducation" parameterType="StudentEducation" useGeneratedKeys="true" keyProperty="id">
+        insert into student_education
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="education != null">
+                education,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="education != null">
+                #{education},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateStudentEducation" parameterType="StudentEducation">
+        update student_education
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="education != null">
+                education = #{education},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStudentEducationById" parameterType="Long">
+        delete from student_education where id = #{id}
+    </delete>
+
+    <delete id="deleteStudentEducationByIds" parameterType="String">
+        delete from student_education where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

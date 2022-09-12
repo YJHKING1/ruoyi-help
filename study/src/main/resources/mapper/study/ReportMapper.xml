@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.study.mapper.ReportMapper">
+    <resultMap type="Report" id="ReportResult">
+        <result property="id" column="id"/>
+        <result property="teacherId" column="teacher_id"/>
+        <result property="helpNum" column="help_num"/>
+        <result property="score" column="score"/>
+        <result property="jobNum" column="job_num"/>
+    </resultMap>
+
+    <sql id="selectReportVo">
+        select id, teacher_id, help_num, score, job_num
+        from report
+    </sql>
+
+    <select id="selectReportList" parameterType="Report" resultMap="ReportResult">
+        <include refid="selectReportVo"/>
+        <where>
+            <if test="teacherId != null">
+                and teacher_id = #{teacherId}
+            </if>
+            <if test="helpNum != null">
+                and help_num = #{helpNum}
+            </if>
+            <if test="score != null">
+                and score = #{score}
+            </if>
+            <if test="jobNum != null">
+                and job_num = #{jobNum}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectReportById" parameterType="Long" resultMap="ReportResult">
+        <include refid="selectReportVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertReport" parameterType="Report" useGeneratedKeys="true" keyProperty="id">
+        insert into report
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="teacherId != null">
+                teacher_id,
+            </if>
+            <if test="helpNum != null">
+                help_num,
+            </if>
+            <if test="score != null">
+                score,
+            </if>
+            <if test="jobNum != null">
+                job_num,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="teacherId != null">
+                #{teacherId},
+            </if>
+            <if test="helpNum != null">
+                #{helpNum},
+            </if>
+            <if test="score != null">
+                #{score},
+            </if>
+            <if test="jobNum != null">
+                #{jobNum},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateReport" parameterType="Report">
+        update report
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="teacherId != null">
+                teacher_id = #{teacherId},
+            </if>
+            <if test="helpNum != null">
+                help_num = #{helpNum},
+            </if>
+            <if test="score != null">
+                score = #{score},
+            </if>
+            <if test="jobNum != null">
+                job_num = #{jobNum},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteReportById" parameterType="Long">
+        delete from report where id = #{id}
+    </delete>
+
+    <delete id="deleteReportByIds" parameterType="String">
+        delete from report where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

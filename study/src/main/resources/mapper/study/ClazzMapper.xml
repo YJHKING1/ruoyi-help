@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.study.mapper.ClazzMapper">
+    <resultMap type="Clazz" id="ClazzResult">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="startTime" column="start_time"/>
+        <result property="entTime" column="ent_time"/>
+        <result property="masterId" column="master_id"/>
+        <result property="jobTeacherId" column="job_teacher_id"/>
+        <result property="studyTeacherId" column="study_teacher_id"/>
+    </resultMap>
+
+    <sql id="selectClazzVo">
+        select id, name, start_time, ent_time, master_id, job_teacher_id, study_teacher_id
+        from clazz
+    </sql>
+
+    <select id="selectClazzList" parameterType="Clazz" resultMap="ClazzResult">
+        <include refid="selectClazzVo"/>
+        <where>
+            <if test="name != null  and name != ''">
+                and name like concat('%', #{name}, '%')
+            </if>
+            <if test="startTime != null">
+                and start_time = #{startTime}
+            </if>
+            <if test="entTime != null">
+                and ent_time = #{entTime}
+            </if>
+            <if test="masterId != null">
+                and master_id = #{masterId}
+            </if>
+            <if test="jobTeacherId != null">
+                and job_teacher_id = #{jobTeacherId}
+            </if>
+            <if test="studyTeacherId != null">
+                and study_teacher_id = #{studyTeacherId}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectClazzById" parameterType="Long" resultMap="ClazzResult">
+        <include refid="selectClazzVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertClazz" parameterType="Clazz" useGeneratedKeys="true" keyProperty="id">
+        insert into clazz
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                name,
+            </if>
+            <if test="startTime != null">
+                start_time,
+            </if>
+            <if test="entTime != null">
+                ent_time,
+            </if>
+            <if test="masterId != null">
+                master_id,
+            </if>
+            <if test="jobTeacherId != null">
+                job_teacher_id,
+            </if>
+            <if test="studyTeacherId != null">
+                study_teacher_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="startTime != null">
+                #{startTime},
+            </if>
+            <if test="entTime != null">
+                #{entTime},
+            </if>
+            <if test="masterId != null">
+                #{masterId},
+            </if>
+            <if test="jobTeacherId != null">
+                #{jobTeacherId},
+            </if>
+            <if test="studyTeacherId != null">
+                #{studyTeacherId},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateClazz" parameterType="Clazz">
+        update clazz
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime},
+            </if>
+            <if test="entTime != null">
+                ent_time = #{entTime},
+            </if>
+            <if test="masterId != null">
+                master_id = #{masterId},
+            </if>
+            <if test="jobTeacherId != null">
+                job_teacher_id = #{jobTeacherId},
+            </if>
+            <if test="studyTeacherId != null">
+                study_teacher_id = #{studyTeacherId},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteClazzById" parameterType="Long">
+        delete from clazz where id = #{id}
+    </delete>
+
+    <delete id="deleteClazzByIds" parameterType="String">
+        delete from clazz where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

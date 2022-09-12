@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.study.mapper.JobMapper">
+    <resultMap type="Job" id="JobResult">
+        <result property="id" column="id"/>
+        <result property="teacherId" column="teacher_id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="reserveTime" column="reserve_time"/>
+        <result property="problemTypeId" column="problem_type_id"/>
+        <result property="state" column="state"/>
+    </resultMap>
+
+    <sql id="selectJobVo">
+        select id, teacher_id, student_id, reserve_time, problem_type_id, state
+        from job
+    </sql>
+
+    <select id="selectJobList" parameterType="Job" resultMap="JobResult">
+        <include refid="selectJobVo"/>
+        <where>
+            <if test="teacherId != null">
+                and teacher_id = #{teacherId}
+            </if>
+            <if test="studentId != null">
+                and student_id = #{studentId}
+            </if>
+            <if test="reserveTime != null">
+                and reserve_time = #{reserveTime}
+            </if>
+            <if test="problemTypeId != null">
+                and problem_type_id = #{problemTypeId}
+            </if>
+            <if test="state != null">
+                and state = #{state}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectJobById" parameterType="Long" resultMap="JobResult">
+        <include refid="selectJobVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertJob" parameterType="Job" useGeneratedKeys="true" keyProperty="id">
+        insert into job
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="teacherId != null">
+                teacher_id,
+            </if>
+            <if test="studentId != null">
+                student_id,
+            </if>
+            <if test="reserveTime != null">
+                reserve_time,
+            </if>
+            <if test="problemTypeId != null">
+                problem_type_id,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="teacherId != null">
+                #{teacherId},
+            </if>
+            <if test="studentId != null">
+                #{studentId},
+            </if>
+            <if test="reserveTime != null">
+                #{reserveTime},
+            </if>
+            <if test="problemTypeId != null">
+                #{problemTypeId},
+            </if>
+            <if test="state != null">
+                #{state},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateJob" parameterType="Job">
+        update job
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="teacherId != null">
+                teacher_id = #{teacherId},
+            </if>
+            <if test="studentId != null">
+                student_id = #{studentId},
+            </if>
+            <if test="reserveTime != null">
+                reserve_time = #{reserveTime},
+            </if>
+            <if test="problemTypeId != null">
+                problem_type_id = #{problemTypeId},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteJobById" parameterType="Long">
+        delete from job where id = #{id}
+    </delete>
+
+    <delete id="deleteJobByIds" parameterType="String">
+        delete from job where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
