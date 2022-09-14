@@ -108,7 +108,13 @@
         </template>
       </el-table-column>
       <el-table-column label="问题类型" align="center" prop="proType.type"/>
-      <el-table-column label="状态" align="center" prop="state"/>
+      <el-table-column label="状态" align="center" prop="state">
+        <template scope="scope">
+          <span v-if="scope.row.state == 0">待处理</span>
+          <span v-else-if="scope.row.state == 1">成功解决</span>
+          <span v-else>解决失败</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
