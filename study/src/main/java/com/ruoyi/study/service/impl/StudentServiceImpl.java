@@ -3,9 +3,9 @@ package com.ruoyi.study.service.impl;
 import com.ruoyi.study.domain.Student;
 import com.ruoyi.study.mapper.StudentMapper;
 import com.ruoyi.study.service.IStudentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Service
 public class StudentServiceImpl implements IStudentService {
-    @Autowired
+    @Resource
     private StudentMapper studentMapper;
     
     /**
@@ -38,7 +38,17 @@ public class StudentServiceImpl implements IStudentService {
      */
     @Override
     public List<Student> selectStudentList(Student student) {
-        return studentMapper.selectStudentList(student);
+        List<Student> students = studentMapper.selectStudentList(student);
+        students.forEach(student1 -> {
+            if (student1.getSex().equals("1")) {
+                student1.setSex("男");
+            } else if (student1.getSex().equals("0")) {
+                student1.setSex("女");
+            } else {
+                student1.setSex("未知");
+            }
+        });
+        return students;
     }
     
     /**

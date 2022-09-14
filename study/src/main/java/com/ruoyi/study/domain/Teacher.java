@@ -2,8 +2,9 @@ package com.ruoyi.study.domain;
 
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 教师对象 teacher
@@ -11,6 +12,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author YJH
  * @date 2022-09-12
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Teacher extends BaseEntity {
     private static final long serialVersionUID = 1L;
     
@@ -42,70 +46,11 @@ public class Teacher extends BaseEntity {
      */
     @Excel(name = "老师类型")
     private Long typeId;
+    private TeacherType teacherType;
     
     /**
      * 性别
      */
     @Excel(name = "性别")
     private String sex;
-    
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-    public Long getId() {
-        return id;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-    
-    public String getPhone() {
-        return phone;
-    }
-    
-    public void setPriority(Long priority) {
-        this.priority = priority;
-    }
-    
-    public Long getPriority() {
-        return priority;
-    }
-    
-    public void setTypeId(Long typeId) {
-        this.typeId = typeId;
-    }
-    
-    public Long getTypeId() {
-        return typeId;
-    }
-    
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-    
-    public String getSex() {
-        return sex;
-    }
-    
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-                .append("id", getId())
-                .append("name", getName())
-                .append("phone", getPhone())
-                .append("priority", getPriority())
-                .append("typeId", getTypeId())
-                .append("sex", getSex())
-                .toString();
-    }
 }

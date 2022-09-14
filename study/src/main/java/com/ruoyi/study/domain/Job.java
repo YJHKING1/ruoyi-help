@@ -3,8 +3,12 @@ package com.ruoyi.study.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.Date;
 
@@ -14,6 +18,9 @@ import java.util.Date;
  * @author YJH
  * @date 2022-09-12
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Job extends BaseEntity {
     private static final long serialVersionUID = 1L;
     
@@ -37,8 +44,8 @@ public class Job extends BaseEntity {
     /**
      * 预约时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "预约时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @Excel(name = "预约时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date reserveTime;
     
     /**
@@ -52,6 +59,15 @@ public class Job extends BaseEntity {
      */
     @Excel(name = "状态")
     private Integer state;
+    private Teacher teacher;
+    private Student student;
+    private JobProblemType proType;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date finalTime;
+    
+    public Date getFinalTime() {
+        return getReserveTime();
+    }
     
     public void setId(Long id) {
         this.id = id;

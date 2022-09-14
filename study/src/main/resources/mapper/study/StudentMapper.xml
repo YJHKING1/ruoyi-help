@@ -3,7 +3,18 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.study.mapper.StudentMapper">
-    <resultMap type="Student" id="StudentResult">
+    <sql id="Base_Column_List">
+        id,
+        `name`,
+        sex,
+        education_id,
+        major,
+        clazz_id,
+        wechat,
+        phone,
+        parent_phone
+    </sql>
+    <resultMap type="com.ruoyi.study.domain.Student" id="StudentResult">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="sex" column="sex"/>
@@ -13,6 +24,23 @@
         <result property="wechat" column="wechat"/>
         <result property="phone" column="phone"/>
         <result property="parentPhone" column="parent_phone"/>
+    </resultMap>
+    <resultMap type="com.ruoyi.study.domain.Student" id="StudentEducationResult">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="sex" column="sex"/>
+        <result property="educationId" column="education_id"/>
+        <result property="major" column="major"/>
+        <result property="clazzId" column="clazz_id"/>
+        <result property="wechat" column="wechat"/>
+        <result property="phone" column="phone"/>
+        <result property="parentPhone" column="parent_phone"/>
+        <association property="education" javaType="com.ruoyi.study.domain.StudentEducation">
+            <result property="education" column="education_name"/>
+        </association>
+        <association property="clazz" javaType="com.ruoyi.study.domain.Clazz">
+            <result property="name" column="clazz_name"/>
+        </association>
     </resultMap>
 
     <sql id="selectStudentVo">
@@ -28,8 +56,11 @@
         from student
     </sql>
 
-    <select id="selectStudentList" parameterType="Student" resultMap="StudentResult">
-        <include refid="selectStudentVo"/>
+    <select id="selectStudentList" parameterType="com.ruoyi.study.domain.Student" resultMap="StudentEducationResult">
+        select s.*, se.education education_name, c.name clazz_name
+        from student s
+        join student_education se on s.education_id = se.id
+        join clazz c on c.id = s.clazz_id
         <where>
             <if test="name != null  and name != ''">
                 and name like concat('%', #{name}, '%')
@@ -63,7 +94,7 @@
         where id = #{id}
     </select>
 
-    <insert id="insertStudent" parameterType="Student" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertStudent" parameterType="com.ruoyi.study.domain.Student" useGeneratedKeys="true" keyProperty="id">
         insert into student
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name != null">
@@ -119,7 +150,7 @@
         </trim>
     </insert>
 
-    <update id="updateStudent" parameterType="Student">
+    <update id="updateStudent" parameterType="com.ruoyi.study.domain.Student">
         update student
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null">
@@ -151,13 +182,22 @@
     </update>
 
     <delete id="deleteStudentById" parameterType="Long">
-        delete from student where id = #{id}
+        delete
+        from student
+        where id = #{id}
     </delete>
 
     <delete id="deleteStudentByIds" parameterType="String">
-        delete from student where id in
+        delete
+        from student where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
+    <select id="selectByPhone" resultMap="StudentResult">
+        select
+        <include refid="Base_Column_List"/>
+        from student
+        where phone=#{phone}
+    </select>
 </mapper>

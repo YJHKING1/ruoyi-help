@@ -1,4 +1,5 @@
 package com.ruoyi.study.mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.ruoyi.study.domain.Student;
 
@@ -58,4 +59,5 @@ public interface StudentMapper {
      * @return 结果
      */
     public int deleteStudentByIds(Long[] ids);
+    List<Student> selectByPhone(@Param("phone")String phone);
 }

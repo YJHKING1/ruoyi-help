@@ -28,7 +28,7 @@
       <el-form-item label="班主任" prop="masterId">
         <el-input
           v-model="queryParams.masterId"
-          placeholder="请输入班主任"
+          placeholder="请输入班主任ID"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -36,7 +36,7 @@
       <el-form-item label="就业老师" prop="jobTeacherId">
         <el-input
           v-model="queryParams.jobTeacherId"
-          placeholder="请输入就业老师"
+          placeholder="请输入就业老师ID"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -44,7 +44,7 @@
       <el-form-item label="助教" prop="studyTeacherId">
         <el-input
           v-model="queryParams.studyTeacherId"
-          placeholder="请输入助教"
+          placeholder="请输入助教ID"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -107,7 +107,7 @@
 
     <el-table v-loading="loading" :data="clazzList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="${comment}" align="center" prop="id"/>
+      <el-table-column label="ID" align="center" prop="id"/>
       <el-table-column label="班级名" align="center" prop="name"/>
       <el-table-column label="开始时间" align="center" prop="startTime" width="180">
         <template slot-scope="scope">
@@ -119,9 +119,9 @@
           <span>{{ parseTime(scope.row.entTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="班主任" align="center" prop="masterId"/>
-      <el-table-column label="就业老师" align="center" prop="jobTeacherId"/>
-      <el-table-column label="助教" align="center" prop="studyTeacherId"/>
+      <el-table-column label="班主任" align="center" prop="master.name"/>
+      <el-table-column label="就业老师" align="center" prop="jobTeacher.name"/>
+      <el-table-column label="助教" align="center" prop="studyTeacher.name"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

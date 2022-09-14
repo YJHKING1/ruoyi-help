@@ -3,8 +3,9 @@ package com.ruoyi.study.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -14,6 +15,9 @@ import java.util.Date;
  * @author YJH
  * @date 2022-09-12
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Clazz extends BaseEntity {
     private static final long serialVersionUID = 1L;
     
@@ -47,85 +51,17 @@ public class Clazz extends BaseEntity {
      */
     @Excel(name = "班主任")
     private Long masterId;
-    
+    private Teacher master;
     /**
      * 就业老师
      */
     @Excel(name = "就业老师")
     private Long jobTeacherId;
-    
+    private Teacher jobTeacher;
     /**
      * 助教
      */
     @Excel(name = "助教")
     private Long studyTeacherId;
-    
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-    public Long getId() {
-        return id;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-    
-    public Date getStartTime() {
-        return startTime;
-    }
-    
-    public void setEntTime(Date entTime) {
-        this.entTime = entTime;
-    }
-    
-    public Date getEntTime() {
-        return entTime;
-    }
-    
-    public void setMasterId(Long masterId) {
-        this.masterId = masterId;
-    }
-    
-    public Long getMasterId() {
-        return masterId;
-    }
-    
-    public void setJobTeacherId(Long jobTeacherId) {
-        this.jobTeacherId = jobTeacherId;
-    }
-    
-    public Long getJobTeacherId() {
-        return jobTeacherId;
-    }
-    
-    public void setStudyTeacherId(Long studyTeacherId) {
-        this.studyTeacherId = studyTeacherId;
-    }
-    
-    public Long getStudyTeacherId() {
-        return studyTeacherId;
-    }
-    
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-                .append("id", getId())
-                .append("name", getName())
-                .append("startTime", getStartTime())
-                .append("entTime", getEntTime())
-                .append("masterId", getMasterId())
-                .append("jobTeacherId", getJobTeacherId())
-                .append("studyTeacherId", getStudyTeacherId())
-                .toString();
-    }
+    private Teacher studyTeacher;
 }

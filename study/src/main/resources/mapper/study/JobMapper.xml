@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.study.mapper.JobMapper">
-    <resultMap type="Job" id="JobResult">
+    <resultMap type="com.ruoyi.study.domain.Job" id="JobResult">
         <result property="id" column="id"/>
         <result property="teacherId" column="teacher_id"/>
         <result property="studentId" column="student_id"/>
@@ -11,39 +11,65 @@
         <result property="problemTypeId" column="problem_type_id"/>
         <result property="state" column="state"/>
     </resultMap>
+    <resultMap type="com.ruoyi.study.domain.Job" id="JobSelectResult">
+        <result property="id" column="id"/>
+        <result property="teacherId" column="teacher_id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="reserveTime" column="reserve_time"/>
+        <result property="problemTypeId" column="problem_type_id"/>
+        <result property="state" column="state"/>
+        <association property="teacher" javaType="com.ruoyi.study.domain.Teacher">
+            <id property="id" column="teacher_id"/>
+            <result property="name" column="tname"/>
+        </association>
+        <association property="student" javaType="com.ruoyi.study.domain.Student">
+            <id property="id" column="student_id"/>
+            <result property="name" column="sname"/>
+        </association>
+        <association property="proType" javaType="com.ruoyi.study.domain.JobProblemType">
+            <id property="id" column="problem_type_id"/>
+            <result property="type" column="ptype"/>
+        </association>
+    </resultMap>
 
     <sql id="selectJobVo">
         select id, teacher_id, student_id, reserve_time, problem_type_id, state
         from job
     </sql>
 
-    <select id="selectJobList" parameterType="Job" resultMap="JobResult">
-        <include refid="selectJobVo"/>
+    <select id="selectJobList" parameterType="com.ruoyi.study.domain.Job" resultMap="JobSelectResult">
+        select j.*,t.name tname,s.name sname,p.type ptype
+        from job j join teacher t on j.teacher_id = t.id
+        join student s on j.student_id = s.id
+        join job_problem_type p on j.problem_type_id = p.id
         <where>
             <if test="teacherId != null">
-                and teacher_id = #{teacherId}
+                and j.teacher_id = #{teacherId}
             </if>
             <if test="studentId != null">
-                and student_id = #{studentId}
+                and j.student_id = #{studentId}
             </if>
             <if test="reserveTime != null">
-                and reserve_time = #{reserveTime}
+                and j.reserve_time = #{reserveTime}
             </if>
             <if test="problemTypeId != null">
-                and problem_type_id = #{problemTypeId}
+                and j.problem_type_id = #{problemTypeId}
             </if>
             <if test="state != null">
-                and state = #{state}
+                and j.state = #{state}
             </if>
         </where>
     </select>
 
-    <select id="selectJobById" parameterType="Long" resultMap="JobResult">
-        <include refid="selectJobVo"/>
-        where id = #{id}
+    <select id="selectJobById" parameterType="Long" resultMap="JobSelectResult">
+        select j.*,t.name tname,s.name sname,p.type ptype
+        from job j join teacher t on j.teacher_id = t.id
+        join student s on j.student_id = s.id
+        join job_problem_type p on j.problem_type_id = p.id
+        where j.id = #{id}
     </select>
 
-    <insert id="insertJob" parameterType="Job" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertJob" parameterType="com.ruoyi.study.domain.Job" useGeneratedKeys="true" keyProperty="id">
         insert into job
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="teacherId != null">
@@ -81,7 +107,7 @@
         </trim>
     </insert>
 
-    <update id="updateJob" parameterType="Job">
+    <update id="updateJob" parameterType="com.ruoyi.study.domain.Job">
         update job
         <trim prefix="SET" suffixOverrides=",">
             <if test="teacherId != null">

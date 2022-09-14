@@ -1,4 +1,5 @@
 package com.ruoyi.study.mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.ruoyi.study.domain.Report;
 
@@ -58,4 +59,5 @@ public interface ReportMapper {
      * @return 结果
      */
     public int deleteReportByIds(Long[] ids);
+    int updateByTeacherId(@Param("updated")Report updated,@Param("teacherId")Long teacherId);
 }

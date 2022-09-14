@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.study.mapper.TeacherMapper">
-    <resultMap type="Teacher" id="TeacherResult">
+    <resultMap type="com.ruoyi.study.domain.Teacher" id="TeacherResult">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="phone" column="phone"/>
@@ -11,14 +11,25 @@
         <result property="typeId" column="type_id"/>
         <result property="sex" column="sex"/>
     </resultMap>
+    <resultMap type="com.ruoyi.study.domain.Teacher" id="TeacherTypeResult">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="phone" column="phone"/>
+        <result property="priority" column="priority"/>
+        <result property="typeId" column="type_id"/>
+        <result property="sex" column="sex"/>
+        <association property="teacherType" javaType="com.ruoyi.study.domain.TeacherType">
+            <result property="type" column="ttType"/>
+        </association>
+    </resultMap>
 
     <sql id="selectTeacherVo">
         select id, name, phone, priority, type_id, sex
         from teacher
     </sql>
 
-    <select id="selectTeacherList" parameterType="Teacher" resultMap="TeacherResult">
-        <include refid="selectTeacherVo"/>
+    <select id="selectTeacherList" parameterType="com.ruoyi.study.domain.Teacher" resultMap="TeacherTypeResult">
+        select t.*,tt.type ttType from teacher t join teacher_type tt on t.type_id = tt.id
         <where>
             <if test="name != null  and name != ''">
                 and name like concat('%', #{name}, '%')
@@ -43,7 +54,7 @@
         where id = #{id}
     </select>
 
-    <insert id="insertTeacher" parameterType="Teacher" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertTeacher" parameterType="com.ruoyi.study.domain.Teacher" useGeneratedKeys="true" keyProperty="id">
         insert into teacher
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name != null">
@@ -81,7 +92,7 @@
         </trim>
     </insert>
 
-    <update id="updateTeacher" parameterType="Teacher">
+    <update id="updateTeacher" parameterType="com.ruoyi.study.domain.Teacher">
         update teacher
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null">

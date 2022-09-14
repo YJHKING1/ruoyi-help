@@ -3,9 +3,9 @@ package com.ruoyi.study.service.impl;
 import com.ruoyi.study.domain.Clazz;
 import com.ruoyi.study.mapper.ClazzMapper;
 import com.ruoyi.study.service.IClazzService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Service
 public class ClazzServiceImpl implements IClazzService {
-    @Autowired
+    @Resource
     private ClazzMapper clazzMapper;
     
     /**

@@ -1,6 +1,9 @@
 package com.ruoyi.study.service;
 
+import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.study.domain.Job;
+import com.ruoyi.study.dto.HelpDto;
+import com.ruoyi.study.dto.JobDto;
 
 import java.util.List;
 
@@ -58,4 +61,12 @@ public interface IJobService {
      * @return 结果
      */
     public int deleteJobById(Long id);
+    
+    int saveHelp(HelpDto dto);
+    
+    int saveJob(JobDto dto);
+    
+    Job getJobFinal(String id);
+    
+    AjaxResult jobTask();
 }

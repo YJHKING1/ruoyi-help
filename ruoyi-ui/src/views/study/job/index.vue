@@ -99,18 +99,34 @@
 
     <el-table v-loading="loading" :data="jobList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="${comment}" align="center" prop="id"/>
-      <el-table-column label="帮扶老师" align="center" prop="teacherId"/>
-      <el-table-column label="帮扶学生" align="center" prop="studentId"/>
+      <el-table-column label="ID" align="center" prop="id"/>
+      <el-table-column label="帮扶老师" align="center" prop="teacher.name"/>
+      <el-table-column label="帮扶学生" align="center" prop="student.name"/>
       <el-table-column label="预约时间" align="center" prop="reserveTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.reserveTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="问题类型" align="center" prop="problemTypeId"/>
+      <el-table-column label="问题类型" align="center" prop="proType.type"/>
       <el-table-column label="状态" align="center" prop="state"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handFinal(scope.row)"
+            v-hasPermi="['study:job:edit']"
+          >完成
+          </el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handMove(scope.row)"
+            v-hasPermi="['study:job:edit']"
+          >移交
+          </el-button>
           <el-button
             size="mini"
             type="text"
@@ -168,11 +184,70 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+    <!-- 完成帮扶对话框 -->
+    <el-dialog :title="title" :visible.sync="finalOpen" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="帮扶学生" prop="studentId">
+          <el-input v-model="form.studentId" disabled/>
+        </el-form-item>
+        <el-form-item label="状态" prop="state">
+          <el-select v-model="form.state" placeholder="请选择状态">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="老师备注">
+          <el-input type="textarea" v-model="desc"></el-input>
+        </el-form-item>
+        <el-form-item label="完成时间" prop="finalTime">
+          <el-date-picker clearable
+                          v-model="finalTime"
+                          type="datetime"
+                          value-format="yyyy-MM-dd HH:mm:ss"
+                          placeholder="请选择完成时间">
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="finalCancel">取 消</el-button>
+      </div>
+    </el-dialog>
+    <!-- 移交帮扶对话框 -->
+    <el-dialog :title="title" :visible.sync="moveOpen" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="帮扶学生" prop="studentId">
+          <el-input v-model="form.studentId" disabled/>
+        </el-form-item>
+        <el-form-item label="移交老师" prop="teacher">
+          <el-select v-model="form.teacherId" placeholder="请选择移交老师" clearable :style="{width: '100%'}">
+            <el-option
+              v-for="item in teacherList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="老师备注">
+          <el-input type="textarea" v-model="desc"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="moveCancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import {addJob, delJob, getJob, listJob, updateJob} from "@/api/study/job";
+import {listTeacher} from "@/api/study/teacher";
 
 export default {
   name: "Job",
@@ -180,6 +255,22 @@ export default {
     return {
       // 遮罩层
       loading: true,
+      moveOpen: false,
+      finalTime: null,
+      desc: '',
+      options: [{
+        value: '0',
+        label: '待处理'
+      }, {
+        value: '1',
+        label: '成功解决'
+      }, {
+        value: '2',
+        label: '解决失败'
+      }],
+      teacherList: [],
+      // 完成帮扶弹框
+      finalOpen: false,
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -225,9 +316,22 @@ export default {
         this.loading = false;
       });
     },
+    getTeacherList() {
+      listTeacher().then(res => {
+        this.teacherList = res.rows;
+      });
+    },
     // 取消按钮
     cancel() {
       this.open = false;
+      this.reset();
+    },
+    finalCancel() {
+      this.finalOpen = false;
+      this.reset();
+    },
+    moveCancel() {
+      this.moveOpen = false;
       this.reset();
     },
     // 表单重置
@@ -274,6 +378,25 @@ export default {
         this.title = "修改就业帮扶";
       });
     },
+    handFinal(row) {
+      this.reset();
+      const id = row.id || this.ids
+      getJob(id).then(response => {
+        this.form = response.data;
+        this.finalOpen = true;
+        this.title = "完成就业帮扶";
+      });
+    },
+    handMove(row) {
+      this.reset();
+      const id = row.id || this.ids
+      this.getTeacherList();
+      getJob(id).then(response => {
+        this.form = response.data;
+        this.moveOpen = true;
+        this.title = "移交就业帮扶";
+      });
+    },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
@@ -282,12 +405,16 @@ export default {
             updateJob(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
+              this.finalOpen = false;
+              this.moveOpen = false;
               this.getList();
             });
           } else {
             addJob(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
+              this.finalOpen = false;
+              this.moveOpen = false;
               this.getList();
             });
           }
@@ -311,6 +438,8 @@ export default {
         ...this.queryParams
       }, `job_${new Date().getTime()}.xlsx`)
     }
+  },
+  mounted() {
   }
 };
 </script>

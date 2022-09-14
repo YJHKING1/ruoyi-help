@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableCustomConfig
 @EnableCustomSwagger2
 @EnableRyFeignClients
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.ruoyi")
 public class RuoYiJobApplication {
     public static void main(String[] args) {
         SpringApplication.run(RuoYiJobApplication.class, args);

@@ -42,3 +42,12 @@ export function delTeacher(id) {
     method: 'delete'
   })
 }
+
+// 查询问题类型
+export function listProList(query) {
+  return request({
+    url: '/study/reserveType/list',
+    method: 'get',
+    params: query
+  })
+}

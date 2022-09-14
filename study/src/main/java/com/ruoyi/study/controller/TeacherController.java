@@ -9,6 +9,7 @@ import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.RequiresPermissions;
 import com.ruoyi.study.domain.Teacher;
 import com.ruoyi.study.service.ITeacherService;
+import com.ruoyi.system.api.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -87,5 +88,10 @@ public class TeacherController extends BaseController {
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(teacherService.deleteTeacherByIds(ids));
+    }
+    
+    @PostMapping("/save")
+    public AjaxResult save(@RequestBody SysUser user) {
+        return teacherService.save(user);
     }
 }

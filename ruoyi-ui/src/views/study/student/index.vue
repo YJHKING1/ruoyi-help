@@ -115,12 +115,12 @@
 
     <el-table v-loading="loading" :data="studentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="${comment}" align="center" prop="id"/>
+      <el-table-column label="ID" align="center" prop="id"/>
       <el-table-column label="姓名" align="center" prop="name"/>
       <el-table-column label="性别" align="center" prop="sex"/>
-      <el-table-column label="学历" align="center" prop="educationId"/>
+      <el-table-column label="学历" align="center" prop="education.education"/>
       <el-table-column label="专业" align="center" prop="major"/>
-      <el-table-column label="班级" align="center" prop="clazzId"/>
+      <el-table-column label="班级" align="center" prop="clazz.name"/>
       <el-table-column label="微信" align="center" prop="wechat"/>
       <el-table-column label="电话" align="center" prop="phone"/>
       <el-table-column label="父母电话" align="center" prop="parentPhone"/>

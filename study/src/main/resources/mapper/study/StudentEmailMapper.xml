@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.study.mapper.StudentEmailMapper">
+    <resultMap type="com.ruoyi.study.domain.StudentEmail" id="StudentEmailResult">
+        <result property="id" column="id"/>
+        <result property="email" column="email"/>
+        <result property="studentId" column="student_id"/>
+    </resultMap>
+    <sql id="selectStudentEmailVo">
+        select id, email, student_id
+        from student_email
+    </sql>
+
+    <select id="selectStudentEmailList" parameterType="com.ruoyi.study.domain.StudentEmail"
+            resultMap="StudentEmailResult">
+        <include refid="selectStudentEmailVo"/>
+        <where>
+            <if test="email != null  and email != ''">
+                and email = #{email}
+            </if>
+            <if test="studentId != null">
+                and student_id = #{studentId}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectStudentEmailById" parameterType="Long"
+            resultMap="StudentEmailResult">
+        <include refid="selectStudentEmailVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertStudentEmail" parameterType="com.ruoyi.study.domain.StudentEmail" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into student_email
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="email != null">
+                email,
+            </if>
+            <if test="studentId != null">
+                student_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="email != null">
+                #{email},
+            </if>
+            <if test="studentId != null">
+                #{studentId},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateStudentEmail" parameterType="com.ruoyi.study.domain.StudentEmail">
+        update student_email
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="email != null">
+                email =
+                    #{email},
+            </if>
+            <if test="studentId != null">
+                student_id =
+                    #{studentId},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStudentEmailById" parameterType="Long">
+        delete
+        from student_email
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteStudentEmailByIds" parameterType="String">
+        delete
+        from student_email where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectByStudentId" resultMap="StudentEmailResult">
+        select *
+        from student_email
+        where student_id = #{studentId}
+    </select>
+</mapper>

@@ -3,12 +3,30 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.study.mapper.ReportMapper">
-    <resultMap type="Report" id="ReportResult">
+    <sql id="Base_Column_List">
+        id,
+        teacher_id,
+        help_num,
+        score,
+        job_num
+    </sql>
+    <resultMap type="com.ruoyi.study.domain.Report" id="ReportResult">
         <result property="id" column="id"/>
         <result property="teacherId" column="teacher_id"/>
         <result property="helpNum" column="help_num"/>
         <result property="score" column="score"/>
         <result property="jobNum" column="job_num"/>
+    </resultMap>
+    <resultMap type="com.ruoyi.study.domain.Report" id="result">
+        <result property="id" column="id"/>
+        <result property="teacherId" column="teacher_id"/>
+        <result property="helpNum" column="help_num"/>
+        <result property="score" column="score"/>
+        <result property="jobNum" column="job_num"/>
+        <association property="teacher" javaType="com.ruoyi.study.domain.Teacher">
+            <id property="id" column="tid"/>
+            <result property="name" column="tname"/>
+        </association>
     </resultMap>
 
     <sql id="selectReportVo">
@@ -16,30 +34,32 @@
         from report
     </sql>
 
-    <select id="selectReportList" parameterType="Report" resultMap="ReportResult">
-        <include refid="selectReportVo"/>
+    <select id="selectReportList" parameterType="com.ruoyi.study.domain.Report" resultMap="result">
+        select r.*,t.name tname,t.id tid
+        from report r join teacher t on t.id = r.teacher_id
         <where>
             <if test="teacherId != null">
-                and teacher_id = #{teacherId}
+                and r.teacher_id = #{teacherId}
             </if>
             <if test="helpNum != null">
-                and help_num = #{helpNum}
+                and r.help_num = #{helpNum}
             </if>
             <if test="score != null">
-                and score = #{score}
+                and r.score = #{score}
             </if>
             <if test="jobNum != null">
-                and job_num = #{jobNum}
+                and r.job_num = #{jobNum}
             </if>
         </where>
     </select>
 
-    <select id="selectReportById" parameterType="Long" resultMap="ReportResult">
-        <include refid="selectReportVo"/>
-        where id = #{id}
+    <select id="selectReportById" parameterType="Long" resultMap="result">
+        select r.*,t.name tname
+        from report r join teacher t on t.id = r.teacher_id
+        where r.id = #{id}
     </select>
 
-    <insert id="insertReport" parameterType="Report" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertReport" parameterType="com.ruoyi.study.domain.Report" useGeneratedKeys="true" keyProperty="id">
         insert into report
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="teacherId != null">
@@ -71,7 +91,7 @@
         </trim>
     </insert>
 
-    <update id="updateReport" parameterType="Report">
+    <update id="updateReport" parameterType="com.ruoyi.study.domain.Report">
         update report
         <trim prefix="SET" suffixOverrides=",">
             <if test="teacherId != null">
@@ -100,4 +120,26 @@
             #{id}
         </foreach>
     </delete>
+
+    <update id="updateByTeacherId">
+        update report
+        <set>
+            <if test="updated.id != null">
+                id = #{updated.id},
+            </if>
+            <if test="updated.teacherId != null">
+                teacher_id = #{updated.teacherId},
+            </if>
+            <if test="updated.helpNum != null">
+                help_num = #{updated.helpNum},
+            </if>
+            <if test="updated.score != null">
+                score = #{updated.score},
+            </if>
+            <if test="updated.jobNum != null">
+                job_num = #{updated.jobNum},
+            </if>
+        </set>
+        where teacher_id=#{teacherId}
+    </update>
 </mapper>

@@ -127,6 +127,19 @@ public class SysUser extends BaseEntity {
      */
     private Long roleId;
     
+    /**
+     * 是否创建老师
+     */
+    private Boolean teacherChecked;
+    
+    public Boolean getTeacherChecked() {
+        return teacherChecked;
+    }
+    
+    public void setTeacherChecked(Boolean teacherChecked) {
+        this.teacherChecked = teacherChecked;
+    }
+    
     public SysUser() {
     
     }

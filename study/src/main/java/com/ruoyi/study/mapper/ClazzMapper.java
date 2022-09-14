@@ -1,6 +1,7 @@
 package com.ruoyi.study.mapper;
 
 import com.ruoyi.study.domain.Clazz;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  * @author YJH
  * @date 2022-09-12
  */
+@Mapper
 public interface ClazzMapper {
     /**
      * 查询班级

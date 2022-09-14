@@ -2,8 +2,9 @@ package com.ruoyi.study.domain;
 
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 学生对象 student
@@ -11,6 +12,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author YJH
  * @date 2022-09-12
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Student extends BaseEntity {
     private static final long serialVersionUID = 1L;
     
@@ -36,6 +40,7 @@ public class Student extends BaseEntity {
      */
     @Excel(name = "学历")
     private String educationId;
+    private StudentEducation education;
     
     /**
      * 专业
@@ -48,6 +53,7 @@ public class Student extends BaseEntity {
      */
     @Excel(name = "班级")
     private Long clazzId;
+    private Clazz clazz;
     
     /**
      * 微信
@@ -66,91 +72,4 @@ public class Student extends BaseEntity {
      */
     @Excel(name = "父母电话")
     private String parentPhone;
-    
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-    public Long getId() {
-        return id;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-    
-    public String getSex() {
-        return sex;
-    }
-    
-    public void setEducationId(String educationId) {
-        this.educationId = educationId;
-    }
-    
-    public String getEducationId() {
-        return educationId;
-    }
-    
-    public void setMajor(String major) {
-        this.major = major;
-    }
-    
-    public String getMajor() {
-        return major;
-    }
-    
-    public void setClazzId(Long clazzId) {
-        this.clazzId = clazzId;
-    }
-    
-    public Long getClazzId() {
-        return clazzId;
-    }
-    
-    public void setWechat(String wechat) {
-        this.wechat = wechat;
-    }
-    
-    public String getWechat() {
-        return wechat;
-    }
-    
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-    
-    public String getPhone() {
-        return phone;
-    }
-    
-    public void setParentPhone(String parentPhone) {
-        this.parentPhone = parentPhone;
-    }
-    
-    public String getParentPhone() {
-        return parentPhone;
-    }
-    
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-                .append("id", getId())
-                .append("name", getName())
-                .append("sex", getSex())
-                .append("educationId", getEducationId())
-                .append("major", getMajor())
-                .append("clazzId", getClazzId())
-                .append("wechat", getWechat())
-                .append("phone", getPhone())
-                .append("parentPhone", getParentPhone())
-                .toString();
-    }
 }

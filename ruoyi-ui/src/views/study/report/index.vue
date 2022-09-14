@@ -91,8 +91,8 @@
 
     <el-table v-loading="loading" :data="reportList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="${comment}" align="center" prop="id"/>
-      <el-table-column label="老师" align="center" prop="teacherId"/>
+      <el-table-column label="ID" align="center" prop="id"/>
+      <el-table-column label="老师" align="center" prop="teacher.name"/>
       <el-table-column label="帮扶数量" align="center" prop="helpNum"/>
       <el-table-column label="平均分" align="center" prop="score"/>
       <el-table-column label="就业跟踪人数" align="center" prop="jobNum"/>

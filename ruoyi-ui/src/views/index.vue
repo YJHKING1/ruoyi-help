@@ -754,23 +754,73 @@
         </el-card>
       </el-col>
     </el-row>
+    <el-drawer
+      title="您有新的预约!"
+      :visible.sync="table"
+      direction="rtl"
+      size="50%">
+      <el-table v-loading="loading" :data="joblistFirst">
+        <el-table-column label="帮扶学生" align="center" prop="student.name"/>
+        <el-table-column label="预约时间" align="center" prop="reserveTime" width="180">
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.reserveTime, '{y}-{m}-{d}') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="问题类型" align="center" prop="proType.type"/>
+        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <a href="http://localhost/study/job">去完成</a>
+        </el-table-column>
+      </el-table>
+    </el-drawer>
   </div>
 </template>
 
 <script>
+import {listTeacher} from "@/api/study/teacher";
+import {listJob} from "@/api/study/job";
+
 export default {
   name: "Index",
   data() {
     return {
       // 版本号
       version: "3.6.0",
+      table: false,
+      loading: false,
+      joblistFirst: [],
+      teacherList: [],
+      queryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        name: null
+      }
     };
   },
   methods: {
     goTarget(href) {
       window.open(href, "_blank");
     },
+    getListFirst() {
+      this.loading = true;
+      this.queryParams.name = this.$store.state.user.name
+      listTeacher(this.queryParams).then(response => {
+        this.teacherList = response.rows;
+      });
+      if (this.teacherList[0]) {
+        this.queryParams.teacherId = this.teacherList[0].id;
+      }
+      this.queryParams.teacherId = 1;
+      listJob(this.queryParams).then(response => {
+        this.joblistFirst = response.rows;
+        this.total = response.total;
+        this.loading = false;
+      });
+    },
   },
+  mounted() {
+    this.getListFirst();
+    this.table = true;
+  }
 };
 </script>
 

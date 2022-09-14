@@ -319,6 +319,13 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="创建老师">
+              <el-checkbox v-model="form.teacherChecked">是否创建老师</el-checkbox>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -552,7 +559,9 @@ export default {
         status: "0",
         remark: undefined,
         postIds: [],
-        roleIds: []
+        roleIds: [],
+        // 是否创建老师
+        teacherChecked: false
       };
       this.resetForm("form");
     },

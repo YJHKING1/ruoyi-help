@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.study.mapper.ReserveTypeMapper">
+    <resultMap type="ReserveType" id="ReserveTypeResult">
+        <result property="id" column="id"/>
+        <result property="type" column="type"/>
+    </resultMap>
+
+    <sql id="selectReserveTypeVo">
+        select id, type
+        from reserve_type
+    </sql>
+
+    <select id="selectReserveTypeList" parameterType="ReserveType" resultMap="ReserveTypeResult">
+        <include refid="selectReserveTypeVo"/>
+        <where>
+            <if test="type != null  and type != ''">
+                and type = #{type}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectReserveTypeById" parameterType="Long"
+            resultMap="ReserveTypeResult">
+        <include refid="selectReserveTypeVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertReserveType" parameterType="ReserveType" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into reserve_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null">
+                #{type},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateReserveType" parameterType="ReserveType">
+        update reserve_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null">
+                type =
+                #{type},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteReserveTypeById" parameterType="Long">
+        delete
+        from reserve_type where id = #{id}
+    </delete>
+
+    <delete id="deleteReserveTypeByIds" parameterType="String">
+        delete from reserve_type where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

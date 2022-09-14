@@ -8,6 +8,8 @@ import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.RequiresPermissions;
 import com.ruoyi.study.domain.Job;
+import com.ruoyi.study.dto.HelpDto;
+import com.ruoyi.study.dto.JobDto;
 import com.ruoyi.study.service.IJobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -87,5 +89,25 @@ public class JobController extends BaseController {
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(jobService.deleteJobByIds(ids));
+    }
+    
+    @PostMapping("/help")
+    @RequiresPermissions("study:job:add")
+    public AjaxResult help(@RequestBody HelpDto dto) {
+        return toAjax(jobService.saveHelp(dto));
+    }
+    
+    @PutMapping("/saveJob")
+    public AjaxResult saveJob(@RequestBody JobDto dto) {
+        return toAjax(jobService.saveJob(dto));
+    }
+    
+    @GetMapping(value = "/getJobFinal/{id}")
+    public AjaxResult getJobFinal(@PathVariable("id") String id) {
+        return AjaxResult.success(jobService.getJobFinal(id));
+    }
+    @GetMapping("/jobTask")
+    public AjaxResult jobTask() {
+        return jobService.jobTask();
     }
 }

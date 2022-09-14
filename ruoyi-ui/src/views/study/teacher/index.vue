@@ -91,11 +91,11 @@
 
     <el-table v-loading="loading" :data="teacherList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="${comment}" align="center" prop="id"/>
+      <el-table-column label="ID" align="center" prop="id"/>
       <el-table-column label="姓名" align="center" prop="name"/>
       <el-table-column label="电话" align="center" prop="phone"/>
       <el-table-column label="帮扶优先级" align="center" prop="priority"/>
-      <el-table-column label="老师类型" align="center" prop="typeId"/>
+      <el-table-column label="老师类型" align="center" prop="teacherType.type"/>
       <el-table-column label="性别" align="center" prop="sex"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">

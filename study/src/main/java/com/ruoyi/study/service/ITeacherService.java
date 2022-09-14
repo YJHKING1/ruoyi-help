@@ -1,6 +1,8 @@
 package com.ruoyi.study.service;
 
+import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.study.domain.Teacher;
+import com.ruoyi.system.api.domain.SysUser;
 
 import java.util.List;
 
@@ -58,4 +60,6 @@ public interface ITeacherService {
      * @return 结果
      */
     public int deleteTeacherById(Long id);
+    
+    AjaxResult save(SysUser user);
 }

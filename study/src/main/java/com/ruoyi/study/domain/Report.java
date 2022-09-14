@@ -2,6 +2,7 @@ package com.ruoyi.study.domain;
 
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author YJH
  * @date 2022-09-12
  */
+@Data
 public class Report extends BaseEntity {
     private static final long serialVersionUID = 1L;
     
@@ -42,6 +44,7 @@ public class Report extends BaseEntity {
      */
     @Excel(name = "就业跟踪人数")
     private Long jobNum;
+    private Teacher teacher;
     
     public void setId(Long id) {
         this.id = id;
