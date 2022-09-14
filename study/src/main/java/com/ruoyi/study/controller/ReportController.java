@@ -30,7 +30,6 @@ public class ReportController extends BaseController {
     /**
      * 查询报表统计列表
      */
-    @RequiresPermissions("study:report:list")
     @GetMapping("/list")
     public TableDataInfo list(Report report) {
         startPage();
@@ -41,7 +40,6 @@ public class ReportController extends BaseController {
     /**
      * 导出报表统计列表
      */
-    @RequiresPermissions("study:report:export")
     @Log(title = "报表统计", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, Report report) {
@@ -53,7 +51,6 @@ public class ReportController extends BaseController {
     /**
      * 获取报表统计详细信息
      */
-    @RequiresPermissions("study:report:query")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
         return AjaxResult.success(reportService.selectReportById(id));
@@ -62,7 +59,6 @@ public class ReportController extends BaseController {
     /**
      * 新增报表统计
      */
-    @RequiresPermissions("study:report:add")
     @Log(title = "报表统计", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody Report report) {
@@ -72,7 +68,6 @@ public class ReportController extends BaseController {
     /**
      * 修改报表统计
      */
-    @RequiresPermissions("study:report:edit")
     @Log(title = "报表统计", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody Report report) {
@@ -82,7 +77,6 @@ public class ReportController extends BaseController {
     /**
      * 删除报表统计
      */
-    @RequiresPermissions("study:report:remove")
     @Log(title = "报表统计", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {

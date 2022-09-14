@@ -30,7 +30,6 @@ public class ReserveTypeController extends BaseController {
     /**
      * 查询帮扶问题类型列表
      */
-    @RequiresPermissions("study:type:list")
     @GetMapping("/list")
     public TableDataInfo list(ReserveType reserveType) {
         startPage();
@@ -41,7 +40,6 @@ public class ReserveTypeController extends BaseController {
     /**
      * 导出帮扶问题类型列表
      */
-    @RequiresPermissions("study:type:export")
     @Log(title = "帮扶问题类型", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, ReserveType reserveType) {
@@ -53,7 +51,6 @@ public class ReserveTypeController extends BaseController {
     /**
      * 获取帮扶问题类型详细信息
      */
-    @RequiresPermissions("study:type:query")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
         return AjaxResult.success(reserveTypeService.selectReserveTypeById(id));
@@ -62,7 +59,6 @@ public class ReserveTypeController extends BaseController {
     /**
      * 新增帮扶问题类型
      */
-    @RequiresPermissions("study:type:add")
     @Log(title = "帮扶问题类型", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ReserveType reserveType) {
@@ -72,7 +68,6 @@ public class ReserveTypeController extends BaseController {
     /**
      * 修改帮扶问题类型
      */
-    @RequiresPermissions("study:type:edit")
     @Log(title = "帮扶问题类型", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody ReserveType reserveType) {
@@ -82,7 +77,6 @@ public class ReserveTypeController extends BaseController {
     /**
      * 删除帮扶问题类型
      */
-    @RequiresPermissions("study:type:remove")
     @Log(title = "帮扶问题类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {

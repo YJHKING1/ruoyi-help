@@ -30,7 +30,6 @@ public class ClazzController extends BaseController {
     /**
      * 查询班级列表
      */
-    @RequiresPermissions("study:clazz:list")
     @GetMapping("/list")
     public TableDataInfo list(Clazz clazz) {
         startPage();
@@ -41,7 +40,6 @@ public class ClazzController extends BaseController {
     /**
      * 导出班级列表
      */
-    @RequiresPermissions("study:clazz:export")
     @Log(title = "班级", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, Clazz clazz) {
@@ -53,7 +51,6 @@ public class ClazzController extends BaseController {
     /**
      * 获取班级详细信息
      */
-    @RequiresPermissions("study:clazz:query")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
         return AjaxResult.success(clazzService.selectClazzById(id));
@@ -62,7 +59,6 @@ public class ClazzController extends BaseController {
     /**
      * 新增班级
      */
-    @RequiresPermissions("study:clazz:add")
     @Log(title = "班级", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody Clazz clazz) {
@@ -72,7 +68,6 @@ public class ClazzController extends BaseController {
     /**
      * 修改班级
      */
-    @RequiresPermissions("study:clazz:edit")
     @Log(title = "班级", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody Clazz clazz) {
@@ -82,7 +77,6 @@ public class ClazzController extends BaseController {
     /**
      * 删除班级
      */
-    @RequiresPermissions("study:clazz:remove")
     @Log(title = "班级", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {

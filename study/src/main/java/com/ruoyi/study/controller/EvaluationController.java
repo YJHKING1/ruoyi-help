@@ -30,7 +30,6 @@ public class EvaluationController extends BaseController {
     /**
      * 查询评价列表
      */
-    @RequiresPermissions("study:evaluation:list")
     @GetMapping("/list")
     public TableDataInfo list(Evaluation evaluation) {
         startPage();
@@ -41,7 +40,6 @@ public class EvaluationController extends BaseController {
     /**
      * 导出评价列表
      */
-    @RequiresPermissions("study:evaluation:export")
     @Log(title = "评价", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, Evaluation evaluation) {
@@ -53,7 +51,6 @@ public class EvaluationController extends BaseController {
     /**
      * 获取评价详细信息
      */
-    @RequiresPermissions("study:evaluation:query")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
         return AjaxResult.success(evaluationService.selectEvaluationById(id));
@@ -62,7 +59,6 @@ public class EvaluationController extends BaseController {
     /**
      * 新增评价
      */
-    @RequiresPermissions("study:evaluation:add")
     @Log(title = "评价", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody Evaluation evaluation) {
@@ -72,7 +68,6 @@ public class EvaluationController extends BaseController {
     /**
      * 修改评价
      */
-    @RequiresPermissions("study:evaluation:edit")
     @Log(title = "评价", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody Evaluation evaluation) {
@@ -82,7 +77,6 @@ public class EvaluationController extends BaseController {
     /**
      * 删除评价
      */
-    @RequiresPermissions("study:evaluation:remove")
     @Log(title = "评价", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {

@@ -13,7 +13,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     /**
      * 不需要拦截地址
      */
-    public static final String[] excludeUrls = {"/login", "/logout", "/refresh","/study"};
+    public static final String[] excludeUrls = {"/login", "/logout", "/refresh","/study/**"};
     
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

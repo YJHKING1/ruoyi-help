@@ -30,7 +30,6 @@ public class StudentEducationController extends BaseController {
     /**
      * 查询学历列表
      */
-    @RequiresPermissions("study:studentEducation:list")
     @GetMapping("/list")
     public TableDataInfo list(StudentEducation studentEducation) {
         startPage();
@@ -41,7 +40,6 @@ public class StudentEducationController extends BaseController {
     /**
      * 导出学历列表
      */
-    @RequiresPermissions("study:studentEducation:export")
     @Log(title = "学历", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, StudentEducation studentEducation) {
@@ -53,7 +51,6 @@ public class StudentEducationController extends BaseController {
     /**
      * 获取学历详细信息
      */
-    @RequiresPermissions("study:studentEducation:query")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
         return AjaxResult.success(studentEducationService.selectStudentEducationById(id));
@@ -62,7 +59,6 @@ public class StudentEducationController extends BaseController {
     /**
      * 新增学历
      */
-    @RequiresPermissions("study:studentEducation:add")
     @Log(title = "学历", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody StudentEducation studentEducation) {
@@ -72,7 +68,6 @@ public class StudentEducationController extends BaseController {
     /**
      * 修改学历
      */
-    @RequiresPermissions("study:studentEducation:edit")
     @Log(title = "学历", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody StudentEducation studentEducation) {
@@ -82,7 +77,6 @@ public class StudentEducationController extends BaseController {
     /**
      * 删除学历
      */
-    @RequiresPermissions("study:studentEducation:remove")
     @Log(title = "学历", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {

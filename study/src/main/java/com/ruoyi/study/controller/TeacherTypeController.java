@@ -30,7 +30,6 @@ public class TeacherTypeController extends BaseController {
     /**
      * 查询教师类型列表
      */
-    @RequiresPermissions("study:teacherType:list")
     @GetMapping("/list")
     public TableDataInfo list(TeacherType teacherType) {
         startPage();
@@ -41,7 +40,6 @@ public class TeacherTypeController extends BaseController {
     /**
      * 导出教师类型列表
      */
-    @RequiresPermissions("study:teacherType:export")
     @Log(title = "教师类型", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, TeacherType teacherType) {
@@ -53,7 +51,6 @@ public class TeacherTypeController extends BaseController {
     /**
      * 获取教师类型详细信息
      */
-    @RequiresPermissions("study:teacherType:query")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
         return AjaxResult.success(teacherTypeService.selectTeacherTypeById(id));
@@ -62,7 +59,6 @@ public class TeacherTypeController extends BaseController {
     /**
      * 新增教师类型
      */
-    @RequiresPermissions("study:teacherType:add")
     @Log(title = "教师类型", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody TeacherType teacherType) {
@@ -72,7 +68,6 @@ public class TeacherTypeController extends BaseController {
     /**
      * 修改教师类型
      */
-    @RequiresPermissions("study:teacherType:edit")
     @Log(title = "教师类型", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody TeacherType teacherType) {
@@ -82,7 +77,6 @@ public class TeacherTypeController extends BaseController {
     /**
      * 删除教师类型
      */
-    @RequiresPermissions("study:teacherType:remove")
     @Log(title = "教师类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {

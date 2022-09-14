@@ -30,7 +30,6 @@ public class ReserveController extends BaseController {
     /**
      * 查询帮扶预约列表
      */
-    @RequiresPermissions("study:reserve:list")
     @GetMapping("/list")
     public TableDataInfo list(Reserve reserve) {
         startPage();
@@ -41,7 +40,6 @@ public class ReserveController extends BaseController {
     /**
      * 导出帮扶预约列表
      */
-    @RequiresPermissions("study:reserve:export")
     @Log(title = "帮扶预约", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, Reserve reserve) {
@@ -53,7 +51,6 @@ public class ReserveController extends BaseController {
     /**
      * 获取帮扶预约详细信息
      */
-    @RequiresPermissions("study:reserve:query")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
         return AjaxResult.success(reserveService.selectReserveById(id));
@@ -62,7 +59,6 @@ public class ReserveController extends BaseController {
     /**
      * 新增帮扶预约
      */
-    @RequiresPermissions("study:reserve:add")
     @Log(title = "帮扶预约", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody Reserve reserve) {
@@ -72,7 +68,6 @@ public class ReserveController extends BaseController {
     /**
      * 修改帮扶预约
      */
-    @RequiresPermissions("study:reserve:edit")
     @Log(title = "帮扶预约", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody Reserve reserve) {
@@ -82,7 +77,6 @@ public class ReserveController extends BaseController {
     /**
      * 删除帮扶预约
      */
-    @RequiresPermissions("study:reserve:remove")
     @Log(title = "帮扶预约", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {

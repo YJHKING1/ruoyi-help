@@ -32,7 +32,6 @@ public class JobController extends BaseController {
     /**
      * 查询就业帮扶列表
      */
-    @RequiresPermissions("study:job:list")
     @GetMapping("/list")
     public TableDataInfo list(Job job) {
         startPage();
@@ -43,7 +42,6 @@ public class JobController extends BaseController {
     /**
      * 导出就业帮扶列表
      */
-    @RequiresPermissions("study:job:export")
     @Log(title = "就业帮扶", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, Job job) {
@@ -55,7 +53,6 @@ public class JobController extends BaseController {
     /**
      * 获取就业帮扶详细信息
      */
-    @RequiresPermissions("study:job:query")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
         return AjaxResult.success(jobService.selectJobById(id));
@@ -64,7 +61,6 @@ public class JobController extends BaseController {
     /**
      * 新增就业帮扶
      */
-    @RequiresPermissions("study:job:add")
     @Log(title = "就业帮扶", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody Job job) {
@@ -74,7 +70,6 @@ public class JobController extends BaseController {
     /**
      * 修改就业帮扶
      */
-    @RequiresPermissions("study:job:edit")
     @Log(title = "就业帮扶", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody Job job) {
@@ -84,7 +79,6 @@ public class JobController extends BaseController {
     /**
      * 删除就业帮扶
      */
-    @RequiresPermissions("study:job:remove")
     @Log(title = "就业帮扶", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {
@@ -92,7 +86,6 @@ public class JobController extends BaseController {
     }
     
     @PostMapping("/help")
-    @RequiresPermissions("study:job:add")
     public AjaxResult help(@RequestBody HelpDto dto) {
         return toAjax(jobService.saveHelp(dto));
     }

@@ -30,7 +30,6 @@ public class JobProblemTypeController extends BaseController {
     /**
      * 查询就业问题类型列表
      */
-    @RequiresPermissions("study:jobProblemType:list")
     @GetMapping("/list")
     public TableDataInfo list(JobProblemType jobProblemType) {
         startPage();
@@ -41,7 +40,6 @@ public class JobProblemTypeController extends BaseController {
     /**
      * 导出就业问题类型列表
      */
-    @RequiresPermissions("study:jobProblemType:export")
     @Log(title = "就业问题类型", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, JobProblemType jobProblemType) {
@@ -53,7 +51,6 @@ public class JobProblemTypeController extends BaseController {
     /**
      * 获取就业问题类型详细信息
      */
-    @RequiresPermissions("study:jobProblemType:query")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
         return AjaxResult.success(jobProblemTypeService.selectJobProblemTypeById(id));
@@ -62,7 +59,6 @@ public class JobProblemTypeController extends BaseController {
     /**
      * 新增就业问题类型
      */
-    @RequiresPermissions("study:jobProblemType:add")
     @Log(title = "就业问题类型", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody JobProblemType jobProblemType) {
@@ -72,7 +68,6 @@ public class JobProblemTypeController extends BaseController {
     /**
      * 修改就业问题类型
      */
-    @RequiresPermissions("study:jobProblemType:edit")
     @Log(title = "就业问题类型", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody JobProblemType jobProblemType) {
@@ -82,7 +77,6 @@ public class JobProblemTypeController extends BaseController {
     /**
      * 删除就业问题类型
      */
-    @RequiresPermissions("study:jobProblemType:remove")
     @Log(title = "就业问题类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {

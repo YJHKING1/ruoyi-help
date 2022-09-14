@@ -30,7 +30,6 @@ public class StudentEmailController extends BaseController {
     /**
      * 查询学生邮箱列表
      */
-    @RequiresPermissions("study:email:list")
     @GetMapping("/list")
     public TableDataInfo list(StudentEmail studentEmail) {
         startPage();
@@ -41,7 +40,6 @@ public class StudentEmailController extends BaseController {
     /**
      * 导出学生邮箱列表
      */
-    @RequiresPermissions("study:email:export")
     @Log(title = "学生邮箱", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, StudentEmail studentEmail) {
@@ -53,7 +51,6 @@ public class StudentEmailController extends BaseController {
     /**
      * 获取学生邮箱详细信息
      */
-    @RequiresPermissions("study:email:query")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
         return AjaxResult.success(studentEmailService.selectStudentEmailById(id));
@@ -62,7 +59,6 @@ public class StudentEmailController extends BaseController {
     /**
      * 新增学生邮箱
      */
-    @RequiresPermissions("study:email:add")
     @Log(title = "学生邮箱", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody StudentEmail studentEmail) {
@@ -72,7 +68,6 @@ public class StudentEmailController extends BaseController {
     /**
      * 修改学生邮箱
      */
-    @RequiresPermissions("study:email:edit")
     @Log(title = "学生邮箱", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody StudentEmail studentEmail) {
@@ -82,7 +77,6 @@ public class StudentEmailController extends BaseController {
     /**
      * 删除学生邮箱
      */
-    @RequiresPermissions("study:email:remove")
     @Log(title = "学生邮箱", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {
