@@ -1,26 +1,35 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="姓名" prop="name">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch"
+             label-width="68px">
+      <el-form-item label="小区" prop="communityId">
+        <el-input
+          v-model="queryParams.communityId"
+          placeholder="请输入小区"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="楼栋" prop="buildId">
+        <el-input
+          v-model="queryParams.buildId"
+          placeholder="请输入楼栋"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="用户ID" prop="userId">
+        <el-input
+          v-model="queryParams.userId"
+          placeholder="请输入用户ID"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="住户" prop="name">
         <el-input
           v-model="queryParams.name"
-          placeholder="请输入姓名"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input
-          v-model="queryParams.email"
-          placeholder="请输入邮箱"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="微信" prop="wechat">
-        <el-input
-          v-model="queryParams.wechat"
-          placeholder="请输入微信"
+          placeholder="请输入住户"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -33,42 +42,26 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="班级" prop="clazzId">
+      <el-form-item label="地址" prop="address">
         <el-input
-          v-model="queryParams.clazzId"
-          placeholder="请输入班级"
+          v-model="queryParams.address"
+          placeholder="请输入地址"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="预约时间" prop="proDate">
-        <el-date-picker clearable
-                        v-model="queryParams.proDate"
-                        type="date"
-                        value-format="yyyy-MM-dd"
-                        placeholder="请选择预约时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="问题类型" prop="proTypeId">
+      <el-form-item label="状态" prop="state">
         <el-input
-          v-model="queryParams.proTypeId"
-          placeholder="请输入问题类型"
+          v-model="queryParams.state"
+          placeholder="请输入状态"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="意向老师" prop="teacherId">
+      <el-form-item label="备注" prop="text">
         <el-input
-          v-model="queryParams.teacherId"
-          placeholder="请输入意向老师"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="问题描述" prop="proText">
-        <el-input
-          v-model="queryParams.proText"
-          placeholder="请输入问题描述"
+          v-model="queryParams.text"
+          placeholder="请输入备注"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -87,7 +80,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['study:reserve:add']"
+          v-hasPermi="['nucleic:resident:add']"
         >新增
         </el-button>
       </el-col>
@@ -99,7 +92,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['study:reserve:edit']"
+          v-hasPermi="['nucleic:resident:edit']"
         >修改
         </el-button>
       </el-col>
@@ -111,7 +104,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['study:reserve:remove']"
+          v-hasPermi="['nucleic:resident:remove']"
         >删除
         </el-button>
       </el-col>
@@ -122,29 +115,24 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['study:reserve:export']"
+          v-hasPermi="['nucleic:resident:export']"
         >导出
         </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="reserveList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="residentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="id" align="center" prop="id"/>
-      <el-table-column label="姓名" align="center" prop="name"/>
-      <el-table-column label="邮箱" align="center" prop="email"/>
-      <el-table-column label="微信" align="center" prop="wechat"/>
+      <el-table-column label="编号" align="center" prop="id"/>
+      <el-table-column label="小区" align="center" prop="communityId"/>
+      <el-table-column label="楼栋" align="center" prop="buildId"/>
+      <el-table-column label="用户" align="center" prop="userId"/>
+      <el-table-column label="住户" align="center" prop="name"/>
       <el-table-column label="电话" align="center" prop="phone"/>
-      <el-table-column label="班级" align="center" prop="clazz.name"/>
-      <el-table-column label="预约时间" align="center" prop="proDate" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.proDate, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="问题类型" align="center" prop="proType.type"/>
-      <el-table-column label="意向老师" align="center" prop="teacher.name"/>
-      <el-table-column label="问题描述" align="center" prop="proText"/>
+      <el-table-column label="地址" align="center" prop="address"/>
+      <el-table-column label="状态" align="center" prop="state"/>
+      <el-table-column label="备注" align="center" prop="text"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -152,7 +140,7 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['study:reserve:edit']"
+            v-hasPermi="['nucleic:resident:edit']"
           >修改
           </el-button>
           <el-button
@@ -160,7 +148,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['study:reserve:remove']"
+            v-hasPermi="['nucleic:resident:remove']"
           >删除
           </el-button>
         </template>
@@ -175,40 +163,32 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改帮扶预约对话框 -->
+    <!-- 添加或修改住户对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="form.name" placeholder="请输入姓名"/>
+        <el-form-item label="小区" prop="communityId">
+          <el-input v-model="form.communityId" placeholder="请输入小区"/>
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="form.email" placeholder="请输入邮箱"/>
+        <el-form-item label="楼栋" prop="buildId">
+          <el-input v-model="form.buildId" placeholder="请输入楼栋"/>
         </el-form-item>
-        <el-form-item label="微信" prop="wechat">
-          <el-input v-model="form.wechat" placeholder="请输入微信"/>
+        <el-form-item label="用户" prop="userId">
+          <el-input v-model="form.userId" placeholder="请输入用户"/>
+        </el-form-item>
+        <el-form-item label="住户" prop="name">
+          <el-input v-model="form.name" placeholder="请输入住户"/>
         </el-form-item>
         <el-form-item label="电话" prop="phone">
           <el-input v-model="form.phone" placeholder="请输入电话"/>
         </el-form-item>
-        <el-form-item label="班级" prop="clazzId">
-          <el-input v-model="form.clazzId" placeholder="请输入班级"/>
+        <el-form-item label="地址" prop="address">
+          <el-input v-model="form.address" placeholder="请输入地址"/>
         </el-form-item>
-        <el-form-item label="预约时间" prop="proDate">
-          <el-date-picker clearable
-                          v-model="form.proDate"
-                          type="date"
-                          value-format="yyyy-MM-dd"
-                          placeholder="请选择预约时间">
-          </el-date-picker>
+        <el-form-item label="状态" prop="state">
+          <el-input v-model="form.state" placeholder="请输入状态"/>
         </el-form-item>
-        <el-form-item label="问题类型" prop="proTypeId">
-          <el-input v-model="form.proTypeId" placeholder="请输入问题类型"/>
-        </el-form-item>
-        <el-form-item label="意向老师" prop="teacherId">
-          <el-input v-model="form.teacherId" placeholder="请输入意向老师"/>
-        </el-form-item>
-        <el-form-item label="问题描述" prop="proText">
-          <el-input v-model="form.proText" placeholder="请输入问题描述"/>
+        <el-form-item label="备注" prop="text">
+          <el-input v-model="form.text" placeholder="请输入备注"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -220,10 +200,10 @@
 </template>
 
 <script>
-import {addReserve, delReserve, getReserve, listReserve, updateReserve} from "@/api/study/reserve";
+import {addResident, delResident, getResident, listResident, updateResident} from "@/api/nucleic/resident";
 
 export default {
-  name: "Reserve",
+  name: "Resident",
   data() {
     return {
       // 遮罩层
@@ -238,8 +218,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 帮扶预约表格数据
-      reserveList: [],
+      // 住户表格数据
+      residentList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -248,15 +228,14 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        communityId: null,
+        buildId: null,
+        userId: null,
         name: null,
-        email: null,
-        wechat: null,
         phone: null,
-        clazzId: null,
-        proDate: null,
-        proTypeId: null,
-        teacherId: null,
-        proText: null
+        address: null,
+        state: null,
+        text: null
       },
       // 表单参数
       form: {},
@@ -268,11 +247,11 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询帮扶预约列表 */
+    /** 查询住户列表 */
     getList() {
       this.loading = true;
-      listReserve(this.queryParams).then(response => {
-        this.reserveList = response.rows;
+      listResident(this.queryParams).then(response => {
+        this.residentList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -286,15 +265,14 @@ export default {
     reset() {
       this.form = {
         id: null,
+        communityId: null,
+        buildId: null,
+        userId: null,
         name: null,
-        email: null,
-        wechat: null,
         phone: null,
-        clazzId: null,
-        proDate: null,
-        proTypeId: null,
-        teacherId: null,
-        proText: null
+        address: null,
+        state: null,
+        text: null
       };
       this.resetForm("form");
     },
@@ -318,30 +296,35 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加帮扶预约";
+      this.title = "添加住户";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getReserve(id).then(response => {
+      getResident(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改帮扶预约";
+        this.title = "修改住户";
       });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.id != null) {
-            updateReserve(this.form).then(response => {
+          if (this.form.id
+            !=
+            null
+          ) {
+            updateResident
+            (this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addReserve(this.form).then(response => {
+            addResident
+            (this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -352,9 +335,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除帮扶预约编号为"' + ids + '"的数据项？').then(function () {
-        return delReserve(ids);
+      const ids = row.$id || this.ids;
+      this.ids.confirm('是否确认删除住户编号为"' + ids + '"的数据项？').then(function () {
+        return delResident(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -363,10 +346,11 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('study/reserve/export', {
+      this.download('nucleic/resident/export', {
         ...this.queryParams
-      }, `reserve_${new Date().getTime()}.xlsx`)
+      }, `resident_${new Date().getTime()}.xlsx`)
     }
   }
-};
+}
+;
 </script>

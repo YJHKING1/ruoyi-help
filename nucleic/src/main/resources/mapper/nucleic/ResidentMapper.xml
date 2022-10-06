@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.nucleic.mapper.ResidentMapper">
+
+    <resultMap type="Resident" id="ResidentResult">
+            <result property="id" column="id"/>
+            <result property="communityId" column="community_id"/>
+            <result property="buildId" column="build_id"/>
+            <result property="userId" column="user_id"/>
+            <result property="name" column="name"/>
+            <result property="phone" column="phone"/>
+            <result property="address" column="address"/>
+            <result property="state" column="state"/>
+            <result property="text" column="text"/>
+    </resultMap>
+
+    <sql id="selectResidentVo">
+        select id, community_id, build_id, user_id, name, phone, address, state, text
+        from resident
+    </sql>
+
+    <select id="selectResidentList" parameterType="Resident" resultMap="ResidentResult">
+        <include refid="selectResidentVo"/>
+        <where>
+                        <if test="communityId != null ">
+                            and community_id = #{communityId}
+                        </if>
+                        <if test="buildId != null ">
+                            and build_id = #{buildId}
+                        </if>
+                        <if test="userId != null ">
+                            and user_id = #{userId}
+                        </if>
+                        <if test="name != null  and name != ''">
+                            and name like concat('%', #{name}, '%')
+                        </if>
+                        <if test="phone != null  and phone != ''">
+                            and phone = #{phone}
+                        </if>
+                        <if test="address != null  and address != ''">
+                            and address = #{address}
+                        </if>
+                        <if test="state != null ">
+                            and state = #{state}
+                        </if>
+                        <if test="text != null  and text != ''">
+                            and text = #{text}
+                        </if>
+        </where>
+    </select>
+
+    <select id="selectResidentById" parameterType="Long"
+            resultMap="ResidentResult">
+            <include refid="selectResidentVo"/>
+            where id = #{id}
+    </select>
+
+    <insert id="insertResident" parameterType="Resident" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into resident
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="communityId != null">community_id,
+                    </if>
+                    <if test="buildId != null">build_id,
+                    </if>
+                    <if test="userId != null">user_id,
+                    </if>
+                    <if test="name != null">name,
+                    </if>
+                    <if test="phone != null">phone,
+                    </if>
+                    <if test="address != null">address,
+                    </if>
+                    <if test="state != null">state,
+                    </if>
+                    <if test="text != null">text,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                    <if test="communityId != null">#{communityId},
+                    </if>
+                    <if test="buildId != null">#{buildId},
+                    </if>
+                    <if test="userId != null">#{userId},
+                    </if>
+                    <if test="name != null">#{name},
+                    </if>
+                    <if test="phone != null">#{phone},
+                    </if>
+                    <if test="address != null">#{address},
+                    </if>
+                    <if test="state != null">#{state},
+                    </if>
+                    <if test="text != null">#{text},
+                    </if>
+        </trim>
+    </insert>
+
+    <update id="updateResident" parameterType="Resident">
+        update resident
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="communityId != null">community_id =
+                        #{communityId},
+                    </if>
+                    <if test="buildId != null">build_id =
+                        #{buildId},
+                    </if>
+                    <if test="userId != null">user_id =
+                        #{userId},
+                    </if>
+                    <if test="name != null">name =
+                        #{name},
+                    </if>
+                    <if test="phone != null">phone =
+                        #{phone},
+                    </if>
+                    <if test="address != null">address =
+                        #{address},
+                    </if>
+                    <if test="state != null">state =
+                        #{state},
+                    </if>
+                    <if test="text != null">text =
+                        #{text},
+                    </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteResidentById" parameterType="Long">
+        delete
+        from resident where id = #{id}
+    </delete>
+
+    <delete id="deleteResidentByIds" parameterType="String">
+        delete from resident where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

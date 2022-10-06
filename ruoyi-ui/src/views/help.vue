@@ -65,9 +65,9 @@
 </template>
 <script>
 import {listClazz} from "@/api/study/clazz";
-import {listTeacher} from "@/api/study/teacher";
-import {listProList} from "@/api/study/teacher";
+import {listProList, listTeacher} from "@/api/study/teacher";
 import {addHelp} from "@/api/study/job";
+
 export default {
   components: {},
   props: [],

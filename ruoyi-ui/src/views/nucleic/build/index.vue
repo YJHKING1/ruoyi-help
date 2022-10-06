@@ -1,34 +1,27 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="帮扶" prop="jobId">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch"
+             label-width="68px">
+      <el-form-item label="小区" prop="communityId">
         <el-input
-          v-model="queryParams.jobId"
-          placeholder="请输入帮扶"
+          v-model="queryParams.communityId"
+          placeholder="请输入小区ID"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="评价" prop="evaluateText">
+      <el-form-item label="楼栋" prop="name">
         <el-input
-          v-model="queryParams.evaluateText"
-          placeholder="请输入评价"
+          v-model="queryParams.name"
+          placeholder="请输入楼栋"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="分数" prop="score">
+      <el-form-item label="状态" prop="state">
         <el-input
-          v-model="queryParams.score"
-          placeholder="请输入分数"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="老师" prop="teacherId">
-        <el-input
-          v-model="queryParams.teacherId"
-          placeholder="请输入老师"
+          v-model="queryParams.state"
+          placeholder="请输入状态"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -47,7 +40,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['study:evaluation:add']"
+          v-hasPermi="['nucleic:build:add']"
         >新增
         </el-button>
       </el-col>
@@ -59,7 +52,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['study:evaluation:edit']"
+          v-hasPermi="['nucleic:build:edit']"
         >修改
         </el-button>
       </el-col>
@@ -71,7 +64,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['study:evaluation:remove']"
+          v-hasPermi="['nucleic:build:remove']"
         >删除
         </el-button>
       </el-col>
@@ -82,20 +75,19 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['study:evaluation:export']"
+          v-hasPermi="['nucleic:build:export']"
         >导出
         </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="evaluationList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="buildList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="id" align="center" prop="id"/>
-      <el-table-column label="帮扶id" align="center" prop="jobId"/>
-      <el-table-column label="评价" align="center" prop="evaluateText"/>
-      <el-table-column label="分数" align="center" prop="score"/>
-      <el-table-column label="老师" align="center" prop="teacher.name"/>
+      <el-table-column label="编号" align="center" prop="id"/>
+      <el-table-column label="小区" align="center" prop="communityId"/>
+      <el-table-column label="楼栋" align="center" prop="name"/>
+      <el-table-column label="状态" align="center" prop="state"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -103,7 +95,7 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['study:evaluation:edit']"
+            v-hasPermi="['nucleic:build:edit']"
           >修改
           </el-button>
           <el-button
@@ -111,7 +103,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['study:evaluation:remove']"
+            v-hasPermi="['nucleic:build:remove']"
           >删除
           </el-button>
         </template>
@@ -126,20 +118,17 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改评价对话框 -->
+    <!-- 添加或修改楼栋对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="帮扶" prop="jobId">
-          <el-input v-model="form.jobId" placeholder="请输入帮扶"/>
+        <el-form-item label=小区 prop="communityId">
+          <el-input v-model="form.communityId" placeholder="请输入小区"/>
         </el-form-item>
-        <el-form-item label="评价" prop="evaluateText">
-          <el-input v-model="form.evaluateText" placeholder="请输入评价"/>
+        <el-form-item label="楼栋" prop="name">
+          <el-input v-model="form.name" placeholder="请输入楼栋"/>
         </el-form-item>
-        <el-form-item label="分数" prop="score">
-          <el-input v-model="form.score" placeholder="请输入分数"/>
-        </el-form-item>
-        <el-form-item label="老师" prop="teacherId">
-          <el-input v-model="form.teacherId" placeholder="请输入老师"/>
+        <el-form-item label="状态" prop="state">
+          <el-input v-model="form.state" placeholder="请输入状态"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -151,10 +140,10 @@
 </template>
 
 <script>
-import {addEvaluation, delEvaluation, getEvaluation, listEvaluation, updateEvaluation} from "@/api/study/evaluation";
+import {addBuild, delBuild, getBuild, listBuild, updateBuild} from "@/api/nucleic/build";
 
 export default {
-  name: "Evaluation",
+  name: "Build",
   data() {
     return {
       // 遮罩层
@@ -169,8 +158,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 评价表格数据
-      evaluationList: [],
+      // 楼栋表格数据
+      buildList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -179,10 +168,9 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        jobId: null,
-        evaluateText: null,
-        score: null,
-        teacherId: null
+        communityId: null,
+        name: null,
+        state: null
       },
       // 表单参数
       form: {},
@@ -194,11 +182,11 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询评价列表 */
+    /** 查询楼栋列表 */
     getList() {
       this.loading = true;
-      listEvaluation(this.queryParams).then(response => {
-        this.evaluationList = response.rows;
+      listBuild(this.queryParams).then(response => {
+        this.buildList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -212,10 +200,9 @@ export default {
     reset() {
       this.form = {
         id: null,
-        jobId: null,
-        evaluateText: null,
-        score: null,
-        teacherId: null
+        communityId: null,
+        name: null,
+        state: null
       };
       this.resetForm("form");
     },
@@ -239,30 +226,33 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加评价";
+      this.title = "添加楼栋";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getEvaluation(id).then(response => {
+      getBuild(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改评价";
+        this.title = "修改楼栋";
       });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.id != null) {
-            updateEvaluation(this.form).then(response => {
+          if (this.form.id != null
+          ) {
+            updateBuild
+            (this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addEvaluation(this.form).then(response => {
+            addBuild
+            (this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -274,8 +264,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除评价编号为"' + ids + '"的数据项？').then(function () {
-        return delEvaluation(ids);
+      this.ids.confirm('是否确认删除楼栋编号为"' + ids + '"的数据项？').then(function () {
+        return delBuild(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -284,10 +274,11 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('study/evaluation/export', {
+      this.download('nucleic/build/export', {
         ...this.queryParams
-      }, `evaluation_${new Date().getTime()}.xlsx`)
+      }, `build_${new Date().getTime()}.xlsx`)
     }
   }
-};
+}
+;
 </script>

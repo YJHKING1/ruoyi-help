@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.nucleic.mapper.CommunityMapper">
+
+    <resultMap type="Community" id="CommunityResult">
+            <result property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="admin" column="admin"/>
+            <result property="adminPhone" column="admin_phone"/>
+            <result property="address" column="address"/>
+            <result property="state" column="state"/>
+    </resultMap>
+
+    <sql id="selectCommunityVo">
+        select id, name, admin, admin_phone, address, state
+        from community
+    </sql>
+
+    <select id="selectCommunityList" parameterType="Community" resultMap="CommunityResult">
+        <include refid="selectCommunityVo"/>
+        <where>
+                        <if test="name != null  and name != ''">
+                            and name like concat('%', #{name}, '%')
+                        </if>
+                        <if test="admin != null  and admin != ''">
+                            and admin = #{admin}
+                        </if>
+                        <if test="adminPhone != null  and adminPhone != ''">
+                            and admin_phone = #{adminPhone}
+                        </if>
+                        <if test="address != null  and address != ''">
+                            and address = #{address}
+                        </if>
+                        <if test="state != null ">
+                            and state = #{state}
+                        </if>
+        </where>
+    </select>
+
+    <select id="selectCommunityById" parameterType="Long"
+            resultMap="CommunityResult">
+            <include refid="selectCommunityVo"/>
+            where id = #{id}
+    </select>
+
+    <insert id="insertCommunity" parameterType="Community" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into community
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="name != null">name,
+                    </if>
+                    <if test="admin != null">admin,
+                    </if>
+                    <if test="adminPhone != null">admin_phone,
+                    </if>
+                    <if test="address != null">address,
+                    </if>
+                    <if test="state != null">state,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                    <if test="name != null">#{name},
+                    </if>
+                    <if test="admin != null">#{admin},
+                    </if>
+                    <if test="adminPhone != null">#{adminPhone},
+                    </if>
+                    <if test="address != null">#{address},
+                    </if>
+                    <if test="state != null">#{state},
+                    </if>
+        </trim>
+    </insert>
+
+    <update id="updateCommunity" parameterType="Community">
+        update community
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="name != null">name =
+                        #{name},
+                    </if>
+                    <if test="admin != null">admin =
+                        #{admin},
+                    </if>
+                    <if test="adminPhone != null">admin_phone =
+                        #{adminPhone},
+                    </if>
+                    <if test="address != null">address =
+                        #{address},
+                    </if>
+                    <if test="state != null">state =
+                        #{state},
+                    </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCommunityById" parameterType="Long">
+        delete
+        from community where id = #{id}
+    </delete>
+
+    <delete id="deleteCommunityByIds" parameterType="String">
+        delete from community where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

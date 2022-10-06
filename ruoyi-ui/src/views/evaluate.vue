@@ -82,7 +82,7 @@ export default {
         }
       })
     },
-    getJog(){
+    getJog() {
       getJobFinal(this.$route.query.code).then(response => {
         this.formData = response.data;
       });

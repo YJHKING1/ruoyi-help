@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.nucleic.mapper.BuildMapper">
+
+    <resultMap type="Build" id="BuildResult">
+            <result property="id" column="id"/>
+            <result property="communityId" column="community_id"/>
+            <result property="name" column="name"/>
+            <result property="state" column="state"/>
+    </resultMap>
+
+    <sql id="selectBuildVo">
+        select id, community_id, name, state
+        from build
+    </sql>
+
+    <select id="selectBuildList" parameterType="Build" resultMap="BuildResult">
+        <include refid="selectBuildVo"/>
+        <where>
+                        <if test="communityId != null ">
+                            and community_id = #{communityId}
+                        </if>
+                        <if test="name != null  and name != ''">
+                            and name like concat('%', #{name}, '%')
+                        </if>
+                        <if test="state != null ">
+                            and state = #{state}
+                        </if>
+        </where>
+    </select>
+
+    <select id="selectBuildById" parameterType="Long"
+            resultMap="BuildResult">
+            <include refid="selectBuildVo"/>
+            where id = #{id}
+    </select>
+
+    <insert id="insertBuild" parameterType="Build" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into build
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="communityId != null">community_id,
+                    </if>
+                    <if test="name != null">name,
+                    </if>
+                    <if test="state != null">state,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                    <if test="communityId != null">#{communityId},
+                    </if>
+                    <if test="name != null">#{name},
+                    </if>
+                    <if test="state != null">#{state},
+                    </if>
+        </trim>
+    </insert>
+
+    <update id="updateBuild" parameterType="Build">
+        update build
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="communityId != null">community_id =
+                        #{communityId},
+                    </if>
+                    <if test="name != null">name =
+                        #{name},
+                    </if>
+                    <if test="state != null">state =
+                        #{state},
+                    </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBuildById" parameterType="Long">
+        delete
+        from build where id = #{id}
+    </delete>
+
+    <delete id="deleteBuildByIds" parameterType="String">
+        delete from build where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

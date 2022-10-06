@@ -250,6 +250,7 @@
         <module>ruoyi-api</module>
         <module>ruoyi-common</module>
         <module>study</module>
+        <module>nucleic</module>
     </modules>
     <packaging>pom</packaging>
 
