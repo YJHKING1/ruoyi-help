@@ -7,6 +7,15 @@ services:
       context: ./nacos
     environment:
       - MODE=standalone
+      - NACOS_AUTH_ENABLED=${NACOS_AUTH_ENABLED:-false}
+      - NACOS_AUTH_TOKEN_SECRET=${NACOS_AUTH_TOKEN_SECRET:-change_me_to_a_long_random_secret_key}
+      - NACOS_AUTH_IDENTITY_KEY=${NACOS_AUTH_IDENTITY_KEY:-serverIdentity}
+      - NACOS_AUTH_IDENTITY_VALUE=${NACOS_AUTH_IDENTITY_VALUE:-change_me}
+      - NACOS_DB_HOST=ruoyi-mysql
+      - NACOS_DB_PORT=3306
+      - NACOS_DB_NAME=ry-config
+      - NACOS_DB_USER=root
+      - NACOS_DB_PASSWORD=${MYSQL_ROOT_PASSWORD:-change_me}
     volumes:
       - ./nacos/logs/:/home/nacos/logs
       - ./nacos/conf/application.properties:/home/nacos/conf/application.properties
@@ -37,7 +46,7 @@ services:
     ]
     environment:
       MYSQL_DATABASE: 'ry-cloud'
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-change_me}
   ruoyi-redis:
     container_name: ruoyi-redis
     image: redis
