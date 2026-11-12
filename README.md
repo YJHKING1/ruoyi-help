@@ -135,3 +135,11 @@ com.ruoyi
 
 QQ群： [![加入QQ群](https://img.shields.io/badge/已满-42799195-blue.svg)](https://jq.qq.com/?_wv=1027&k=yqInfq0S) [![加入QQ群](https://img.shields.io/badge/已满-170157040-blue.svg)](https://jq.qq.com/?_wv=1027&k=Oy1mb3p8) [![加入QQ群](https://img.shields.io/badge/已满-130643120-blue.svg)](https://jq.qq.com/?_wv=1027&k=rvxkJtXK) [![加入QQ群](https://img.shields.io/badge/已满-225920371-blue.svg)](https://jq.qq.com/?_wv=1027&k=0Ck3PvTe) [![加入QQ群](https://img.shields.io/badge/已满-201705537-blue.svg)](https://jq.qq.com/?_wv=1027&k=FnHHP4TT) [![加入QQ群](https://img.shields.io/badge/已满-236543183-blue.svg)](https://jq.qq.com/?_wv=1027&k=qdT1Ojpz) [![加入QQ群](https://img.shields.io/badge/已满-213618602-blue.svg)](https://jq.qq.com/?_wv=1027&k=nw3OiyXs) [![加入QQ群](https://img.shields.io/badge/148794840-blue.svg)](https://jq.qq.com/?_wv=1027&k=kiU5WDls)
 点击按钮入群。
+
+## 部署凭据
+
+所有 Java 服务使用同一个 `RUOYI_JWT_SECRET`。用 `openssl rand 64 | openssl base64 -A` 生成部署专用的签名密钥，并通过运行环境提供。切换签名密钥后用户需重新登录。
+
+Compose 还要求 `MYSQL_ROOT_PASSWORD`、`REDIS_PASSWORD`、`NACOS_AUTH_TOKEN_SECRET`、`NACOS_AUTH_IDENTITY_KEY`、`NACOS_AUTH_IDENTITY_VALUE`、`NACOS_USERNAME` 和 `NACOS_PASSWORD`。Nacos 令牌密钥使用至少 32 字节的随机数据做 Base64 编码。先启动基础服务，在 Nacos 配置应用账号及权限，再启动 Java 服务。现有环境需同步更新 Nacos 中的 MySQL 和 Redis 配置。
+
+Compose 仅对宿主机发布 Nginx 的对外端口，其余映射绑定到回环地址。独立运行 Java 服务时可通过 `NACOS_SERVER_ADDR`、`NACOS_USERNAME` 和 `NACOS_PASSWORD` 配置连接。
