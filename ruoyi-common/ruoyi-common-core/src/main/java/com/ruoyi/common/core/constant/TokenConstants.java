@@ -16,9 +16,5 @@ public class TokenConstants {
      */
     public static final String PREFIX = "Bearer ";
     
-    /**
-     * 令牌秘钥
-     */
-    public final static String SECRET = "abcdefghijklmnopqrstuvwxyz";
     
 }
