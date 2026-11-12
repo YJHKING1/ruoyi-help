@@ -37,7 +37,7 @@
           <img :src="codeUrl" @click="getCode" class="login-code-img"/>
         </div>
       </el-form-item>
-      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
+      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住用户名</el-checkbox>
       <el-form-item style="width:100%;">
         <el-button
           :loading="loading"
@@ -64,7 +64,6 @@
 <script>
 import {getCodeImg} from "@/api/login";
 import Cookies from "js-cookie";
-import {decrypt, encrypt} from '@/utils/jsencrypt'
 
 export default {
   name: "Login",
@@ -72,8 +71,8 @@ export default {
     return {
       codeUrl: "",
       loginForm: {
-        username: "admin",
-        password: "admin123",
+        username: "",
+        password: "",
         rememberMe: false,
         code: "",
         uuid: ""
@@ -118,14 +117,9 @@ export default {
       });
     },
     getCookie() {
-      const username = Cookies.get("username");
-      const password = Cookies.get("password");
-      const rememberMe = Cookies.get('rememberMe')
-      this.loginForm = {
-        username: username === undefined ? this.loginForm.username : username,
-        password: password === undefined ? this.loginForm.password : decrypt(password),
-        rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
-      };
+      Cookies.remove("password");
+      this.loginForm.username = Cookies.get("username") || "";
+      this.loginForm.rememberMe = Cookies.get("rememberMe") === "true";
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
@@ -133,11 +127,9 @@ export default {
           this.loading = true;
           if (this.loginForm.rememberMe) {
             Cookies.set("username", this.loginForm.username, {expires: 30});
-            Cookies.set("password", encrypt(this.loginForm.password), {expires: 30});
             Cookies.set('rememberMe', this.loginForm.rememberMe, {expires: 30});
           } else {
             Cookies.remove("username");
-            Cookies.remove("password");
             Cookies.remove('rememberMe');
           }
           this.$store.dispatch("Login", this.loginForm).then(() => {

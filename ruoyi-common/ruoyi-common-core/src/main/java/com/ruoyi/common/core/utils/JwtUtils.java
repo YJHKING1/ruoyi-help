@@ -1,12 +1,12 @@
 package com.ruoyi.common.core.utils;
 
 import com.ruoyi.common.core.constant.SecurityConstants;
-import com.ruoyi.common.core.constant.TokenConstants;
 import com.ruoyi.common.core.text.Convert;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import java.util.Base64;
 import java.util.Map;
 
 /**
@@ -15,7 +15,22 @@ import java.util.Map;
  * @author ruoyi
  */
 public class JwtUtils {
-    public static String secret = TokenConstants.SECRET;
+    private static byte[] signingKey() {
+        String configured = System.getenv("RUOYI_JWT_SECRET");
+        if (configured == null || configured.trim().isEmpty()) {
+            throw new IllegalStateException("RUOYI_JWT_SECRET is required");
+        }
+        byte[] key;
+        try {
+            key = Base64.getDecoder().decode(configured.trim());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalStateException("RUOYI_JWT_SECRET must be Base64 encoded");
+        }
+        if (key.length < 64) {
+            throw new IllegalStateException("RUOYI_JWT_SECRET must contain at least 64 decoded bytes");
+        }
+        return key;
+    }
     
     /**
      * 从数据声明生成令牌
@@ -24,7 +39,7 @@ public class JwtUtils {
      * @return 令牌
      */
     public static String createToken(Map<String, Object> claims) {
-        String token = Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, secret).compact();
+        String token = Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, signingKey()).compact();
         return token;
     }
     
@@ -35,7 +50,7 @@ public class JwtUtils {
      * @return 数据声明
      */
     public static Claims parseToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(signingKey()).parseClaimsJws(token).getBody();
     }
     
     /**
